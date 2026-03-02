@@ -30,6 +30,28 @@ navLinks.querySelectorAll('a').forEach(link => {
   });
 });
 
+// --- Smooth scroll utility ---
+function smoothScrollTo(targetEl, duration = 800) {
+  const navHeight = 72;
+  const startY = window.pageYOffset;
+  const targetY = targetEl.getBoundingClientRect().top + startY - navHeight;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+
 // --- Anchor link navigation ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
@@ -46,23 +68,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
     const target = document.querySelector(href);
     if (target) {
-      // Force browser to compute the final layout
+      // Force browser to compute the final layout (with image dimensions reserved)
       void document.body.offsetHeight;
 
-      // Double rAF ensures the browser has fully painted before scrolling
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          // Temporarily disable CSS smooth scroll for an instant jump
-          document.documentElement.style.scrollBehavior = 'auto';
-          // scrollIntoView respects scroll-margin-top (72px nav offset) automatically
-          target.scrollIntoView({ block: 'start' });
-          // Restore smooth scrolling after the jump completes
-          requestAnimationFrame(() => {
-            document.documentElement.style.scrollBehavior = '';
-          });
-          history.pushState(null, '', href);
-        });
-      });
+      smoothScrollTo(target);
+      history.pushState(null, '', href);
     }
   });
 });
