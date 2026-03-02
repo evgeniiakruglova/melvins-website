@@ -33,25 +33,23 @@ navLinks.querySelectorAll('a').forEach(link => {
 // --- Smooth scroll for anchor links ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (!href || href === '#') return;
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
+
+    // Instantly reveal ALL fade-in elements (no transition)
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.transition = 'none';
+      el.classList.add('visible');
+      observer.unobserve(el);
+    });
+    document.body.offsetHeight; // force reflow
+
+    // Navigate to the anchor — CSS scroll-behavior: smooth handles the animation
+    history.pushState(null, '', href);
+    const target = document.querySelector(href);
     if (target) {
-      // Instantly reveal ALL fade-in elements (no transition) to prevent
-      // layout shifts that interrupt smooth scrolling
-      document.querySelectorAll('.fade-in').forEach(el => {
-        el.style.transition = 'none';
-        el.classList.add('visible');
-        observer.unobserve(el);
-      });
-
-      // Force browser to apply the instant changes before scrolling
-      document.body.offsetHeight;
-
-      // Scroll to the heading content, not the section container
-      const scrollTarget = target.querySelector('.section-header, .about__heading, .section-label') || target;
-      const offset = 88; // nav height + comfortable buffer
-      const top = scrollTarget.getBoundingClientRect().top + window.pageYOffset - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
+      target.scrollIntoView();
     }
   });
 });
