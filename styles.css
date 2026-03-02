@@ -1300,6 +1300,28 @@ ul {
     columns: 1;
   }
 
+  .about__credentials--row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .about__credentials--row .about__credential {
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    gap: 8px;
+  }
+
+  .about__credentials--row .about__credential-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .about__video--full {
+    margin-top: 20px;
+  }
+
   .contact__sidebar {
     flex-direction: column;
     align-items: flex-start;
