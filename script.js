@@ -36,8 +36,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
-      const offset = 80; // nav height
-      const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      // Immediately reveal all fade-in elements in the target section
+      target.querySelectorAll('.fade-in').forEach(el => {
+        el.classList.add('visible');
+        el.style.transitionDelay = '0s';
+      });
+      // Also reveal the section header itself if it has fade-in
+      const header = target.querySelector('.section-header, .about__heading, .why__text');
+      if (header) {
+        header.classList.add('visible');
+        header.style.transitionDelay = '0s';
+      }
+
+      // Scroll to the heading content, not the section container
+      const scrollTarget = target.querySelector('.section-header, .about__heading, .section-label') || target;
+      const offset = 88; // nav height + comfortable buffer
+      const top = scrollTarget.getBoundingClientRect().top + window.pageYOffset - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
   });
@@ -76,32 +90,47 @@ document.addEventListener('DOMContentLoaded', () => {
 const contactForm = document.getElementById('contactForm');
 
 contactForm.addEventListener('submit', function (e) {
+  e.preventDefault();
   const submitBtn = this.querySelector('button[type="submit"]');
   const originalText = submitBtn.innerHTML;
+  const formData = new FormData(this);
 
-  // If using FormSubmit.co, let it submit normally
-  // For demo/local mode, we'll show a success message
-  if (this.action.includes('YOUR_EMAIL_HERE')) {
-    e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = 'Sending...';
 
-    submitBtn.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-      Message Sent!
-    `;
-    submitBtn.style.background = '#22c55e';
-    submitBtn.style.borderColor = '#22c55e';
-    submitBtn.disabled = true;
-
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
+  })
+  .then(response => {
+    if (response.ok) {
+      submitBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Message Sent!
+      `;
+      submitBtn.style.background = '#22c55e';
+      submitBtn.style.borderColor = '#22c55e';
+      contactForm.reset();
+    } else {
+      throw new Error('Form submission failed');
+    }
+  })
+  .catch(() => {
+    submitBtn.innerHTML = 'Something went wrong. Try again.';
+    submitBtn.style.background = '#ef4444';
+    submitBtn.style.borderColor = '#ef4444';
+  })
+  .finally(() => {
     setTimeout(() => {
       submitBtn.innerHTML = originalText;
       submitBtn.style.background = '';
       submitBtn.style.borderColor = '';
       submitBtn.disabled = false;
-      contactForm.reset();
     }, 3000);
-  }
+  });
 });
 
 // --- Active navigation highlighting ---
