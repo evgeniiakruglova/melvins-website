@@ -10,10 +10,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 :root {
   --gold: #D4A520;
   --gold-light: #E8BC47;
