@@ -10,7 +10,7 @@ window.addEventListener('scroll', () => {
     nav.classList.add('nav--scrolled');
   } else {
     nav.classList.remove('nav--scrolled');
-  }
+  }Override CSS scroll-behavior: smooth with 'auto' during programmatic scrollTo to prevent lazy-loaded gallery images from shifting the layout mid-scroll and causing the navigation to land on the wrong section.
 });
 
 // --- Mobile menu toggle ---
