@@ -36,13 +36,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
-      // Reveal ALL fade-in elements on the page to prevent layout shifts
-      // that interrupt smooth scrolling
+      // Instantly reveal ALL fade-in elements (no transition) to prevent
+      // layout shifts that interrupt smooth scrolling
       document.querySelectorAll('.fade-in').forEach(el => {
+        el.style.transition = 'none';
         el.classList.add('visible');
-        el.style.transitionDelay = '0s';
         observer.unobserve(el);
       });
+
+      // Force browser to apply the instant changes before scrolling
+      document.body.offsetHeight;
 
       // Scroll to the heading content, not the section container
       const scrollTarget = target.querySelector('.section-header, .about__heading, .section-label') || target;
