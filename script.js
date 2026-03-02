@@ -50,7 +50,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       setTimeout(() => {
         const navHeight = 72;
         const y = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-        window.scrollTo(0, y);
+                              document.documentElement.style.scrollBehavior = 'auto';
+                     window.scrollTo(0, y);
+                     document.documentElement.style.scrollBehavior = 'smooth';
         history.pushState(null, '', href);
       }, 50);
     }
