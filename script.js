@@ -37,24 +37,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (!href || href === '#') return;
     e.preventDefault();
 
-    // Instantly reveal ALL fade-in elements
+    // Instantly reveal ALL fade-in elements so layout is final
     document.querySelectorAll('.fade-in').forEach(el => {
       el.style.transition = 'none';
       el.classList.add('visible');
       observer.unobserve(el);
     });
 
-    // Wait for browser to process the layout, then scroll
     const target = document.querySelector(href);
     if (target) {
-      setTimeout(() => {
-        const navHeight = 72;
-        const y = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-                              document.documentElement.style.scrollBehavior = 'auto';
-                     window.scrollTo(0, y);
-                     document.documentElement.style.scrollBehavior = 'smooth';
-        history.pushState(null, '', href);
-      }, 50);
+      // Force browser to compute the final layout
+      void document.body.offsetHeight;
+
+      // Double rAF ensures the browser has fully painted before scrolling
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // Temporarily disable CSS smooth scroll for an instant jump
+          document.documentElement.style.scrollBehavior = 'auto';
+          // scrollIntoView respects scroll-margin-top (72px nav offset) automatically
+          target.scrollIntoView({ block: 'start' });
+          // Restore smooth scrolling after the jump completes
+          requestAnimationFrame(() => {
+            document.documentElement.style.scrollBehavior = '';
+          });
+          history.pushState(null, '', href);
+        });
+      });
     }
   });
 });
