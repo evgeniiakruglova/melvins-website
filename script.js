@@ -31,26 +31,17 @@ navLinks.querySelectorAll('a').forEach(link => {
 });
 
 // --- Smooth scroll for anchor links ---
+// Let the browser handle scrolling natively (CSS scroll-behavior: smooth)
+// We only need to reveal fade-in elements before the scroll happens
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const href = this.getAttribute('href');
-    if (!href || href === '#') return;
-    e.preventDefault();
-
-    // Instantly reveal ALL fade-in elements (no transition)
+  anchor.addEventListener('click', function () {
+    // Instantly reveal ALL fade-in elements so nothing shifts during scroll
     document.querySelectorAll('.fade-in').forEach(el => {
       el.style.transition = 'none';
       el.classList.add('visible');
       observer.unobserve(el);
     });
-    document.body.offsetHeight; // force reflow
-
-    // Navigate to the anchor — CSS scroll-behavior: smooth handles the animation
-    history.pushState(null, '', href);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView();
-    }
+    // Do NOT preventDefault — let the browser handle the anchor scroll natively
   });
 });
 
