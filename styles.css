@@ -398,7 +398,7 @@ ul {
 
 /* ---------- ABOUT ---------- */
 .about {
-  padding: 80px 0;
+  padding: 60px 0;
   position: relative;
   scroll-margin-top: var(--nav-height);
 }
@@ -452,12 +452,12 @@ ul {
 
 .about__image-accent {
   position: absolute;
-  top: -12px;
-  right: -12px;
-  width: 100%;
-  height: 100%;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
   border: 2px solid var(--gold);
-  border-radius: 12px;
+  border-radius: 16px;
   z-index: -1;
   opacity: 0.3;
 }
@@ -491,9 +491,24 @@ ul {
   line-height: 1.75;
 }
 
+.about__video {
+  margin-top: 32px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 165, 32, 0.15);
+  aspect-ratio: 16 / 9;
+}
+
+.about__video-embed {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
 /* ---------- SERVICES ---------- */
 .services {
-  padding: 80px 0;
+  padding: 60px 0;
   background: linear-gradient(180deg, var(--black) 0%, rgba(212, 165, 32, 0.02) 50%, var(--black) 100%);
   scroll-margin-top: var(--nav-height);
 }
@@ -625,7 +640,7 @@ ul {
 
 /* ---------- WHY SECTION ---------- */
 .why {
-  padding: 80px 0;
+  padding: 60px 0;
   position: relative;
   scroll-margin-top: var(--nav-height);
 }
@@ -699,39 +714,25 @@ ul {
 
 /* ---------- GALLERY ---------- */
 .gallery {
-  padding: 80px 0;
+  padding: 60px 0;
   background: linear-gradient(180deg, var(--black) 0%, rgba(212, 165, 32, 0.02) 50%, var(--black) 100%);
   scroll-margin-top: var(--nav-height);
 }
 
 .gallery__grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  min-height: 500px;
+}
+
+.gallery__grid--photos .gallery__item--placeholder {
+  min-height: 240px;
 }
 
 .gallery__item {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-}
-
-.gallery__item--video {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
-  background: linear-gradient(135deg, var(--black-soft), var(--gray-800));
-  border: 1px solid rgba(212, 165, 32, 0.15);
-  min-height: 500px;
-}
-
-.gallery__video-embed {
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
-  border: none;
-  border-radius: 12px;
 }
 
 .gallery__item--placeholder {
@@ -755,7 +756,7 @@ ul {
 
 /* ---------- TESTIMONIALS ---------- */
 .testimonials {
-  padding: 80px 0;
+  padding: 60px 0;
   scroll-margin-top: var(--nav-height);
 }
 
@@ -823,7 +824,7 @@ ul {
 
 /* ---------- CONTACT ---------- */
 .contact {
-  padding: 80px 0;
+  padding: 60px 0;
   position: relative;
   scroll-margin-top: var(--nav-height);
 }
