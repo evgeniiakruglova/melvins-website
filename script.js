@@ -44,13 +44,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       observer.unobserve(el);
     });
 
-    // Instant jump to target — no smooth scroll, 100% reliable
+    // Wait for browser to process the layout, then scroll
     const target = document.querySelector(href);
     if (target) {
-      const navHeight = 72;
-      const y = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-      window.scrollTo(0, y);
-      history.pushState(null, '', href);
+      setTimeout(() => {
+        const navHeight = 72;
+        const y = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo(0, y);
+        history.pushState(null, '', href);
+      }, 50);
     }
   });
 });
