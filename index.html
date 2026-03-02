@@ -395,9 +395,12 @@
       </div>
       <div class="contact__grid">
         <div class="contact__form-wrapper">
-          <form class="contact__form" id="contactForm" name="booking" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-            <input type="hidden" name="form-name" value="booking">
-            <p style="display:none"><input name="bot-field"></p>
+          <form class="contact__form" id="contactForm" action="https://formsubmit.co/melvinboateng@yahoo.com" method="POST">
+            <input type="hidden" name="_subject" value="New Booking Request - Goal Training Academy">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://goaltrainingacademy.netlify.app/#contact">
+            <input type="text" name="_honey" style="display:none">
 
             <div class="form-group">
               <label for="name">Full Name</label>

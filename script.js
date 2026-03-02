@@ -89,48 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Contact form handling ---
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', function (e) {
-  e.preventDefault();
+contactForm.addEventListener('submit', function () {
   const submitBtn = this.querySelector('button[type="submit"]');
-  const originalText = submitBtn.innerHTML;
-  const formData = new FormData(this);
-
   submitBtn.disabled = true;
   submitBtn.innerHTML = 'Sending...';
-
-  fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(formData).toString()
-  })
-  .then(response => {
-    if (response.ok) {
-      submitBtn.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        Message Sent!
-      `;
-      submitBtn.style.background = '#22c55e';
-      submitBtn.style.borderColor = '#22c55e';
-      contactForm.reset();
-    } else {
-      throw new Error('Form submission failed');
-    }
-  })
-  .catch(() => {
-    submitBtn.innerHTML = 'Something went wrong. Try again.';
-    submitBtn.style.background = '#ef4444';
-    submitBtn.style.borderColor = '#ef4444';
-  })
-  .finally(() => {
-    setTimeout(() => {
-      submitBtn.innerHTML = originalText;
-      submitBtn.style.background = '';
-      submitBtn.style.borderColor = '';
-      submitBtn.disabled = false;
-    }, 3000);
-  });
 });
 
 // --- Active navigation highlighting ---
