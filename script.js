@@ -108,19 +108,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Contact form handling ---
 const contactForm = document.getElementById('contactForm');
+const WEBHOOK_URL = 'https://jenyakruglova.app.n8n.cloud/webhook/goal-training-form';
 
 contactForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const submitBtn = this.querySelector('button[type="submit"]');
   const originalText = submitBtn.innerHTML;
 
+  // Build JSON payload from form fields
+  const payload = {
+    name: this.querySelector('#name').value,
+    email: this.querySelector('#email').value,
+    phone: this.querySelector('#phone').value,
+    program: this.querySelector('#program').value,
+    player_age: this.querySelector('#player-age').value,
+    message: this.querySelector('#message').value,
+    honeypot: this.querySelector('[name="honeypot"]').value,
+    submitted_at: new Date().toISOString(),
+    source: 'website'
+  };
+
   submitBtn.disabled = true;
   submitBtn.innerHTML = 'Sending...';
 
-  fetch(this.action, {
+  fetch(WEBHOOK_URL, {
     method: 'POST',
-    body: new FormData(this),
-    headers: { 'Accept': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
   })
   .then(response => {
     if (response.ok) {
