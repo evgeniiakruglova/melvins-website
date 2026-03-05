@@ -106,6 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// --- Phone number formatting ---
+function formatPhone(value) {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  if (digits.length === 11 && digits[0] === '1') {
+    return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+  return value;
+}
+
 // --- Contact form handling ---
 const contactForm = document.getElementById('contactForm');
 const WEBHOOK_URL = 'https://jenyakruglova.app.n8n.cloud/webhook/goal-training-form';
@@ -119,7 +131,7 @@ contactForm.addEventListener('submit', function (e) {
   const payload = {
     name: this.querySelector('#name').value,
     email: this.querySelector('#email').value,
-    phone: this.querySelector('#phone').value,
+    phone: formatPhone(this.querySelector('#phone').value),
     program: this.querySelector('#program').value,
     player_age: this.querySelector('#player-age').value,
     message: this.querySelector('#message').value,
