@@ -120,7 +120,8 @@ function formatPhone(value) {
 
 // --- Contact form handling ---
 const contactForm = document.getElementById('contactForm');
-const WEBHOOK_URL = 'https://jenyakruglova.app.n8n.cloud/webhook/goal-training-form';
+// Google Apps Script web app URL (deployed as "Anyone can access")
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwadpFNOlXra9PS9ApdexgzkhAepqFb9XG7QaHamRQ7nHE0g7xCmxYImqVx9qrLhgh6XQ/exec';
 
 contactForm.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -145,23 +146,21 @@ contactForm.addEventListener('submit', function (e) {
 
   fetch(WEBHOOK_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    mode: 'no-cors'
   })
-  .then(response => {
-    if (response.ok) {
-      submitBtn.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        Message Sent!
-      `;
-      submitBtn.style.background = '#22c55e';
-      submitBtn.style.borderColor = '#22c55e';
-      contactForm.reset();
-    } else {
-      throw new Error('Failed');
-    }
+  .then(() => {
+    // With mode: 'no-cors', we get an opaque response (can't read status).
+    // If fetch didn't throw, the request was sent successfully.
+    submitBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Message Sent!
+    `;
+    submitBtn.style.background = '#22c55e';
+    submitBtn.style.borderColor = '#22c55e';
+    contactForm.reset();
   })
   .catch(() => {
     submitBtn.innerHTML = 'Something went wrong. Try again.';
